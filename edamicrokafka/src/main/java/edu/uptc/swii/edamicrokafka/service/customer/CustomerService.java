@@ -1,9 +1,10 @@
-package edu.uptc.swii.edamicrokafka.service;
+package edu.uptc.swii.edamicrokafka.service.customer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.uptc.swii.edamicrokafka.model.Customer;
@@ -14,6 +15,7 @@ public class CustomerService {
 
   private final CustomerRepository customerRepository;
 
+  @Autowired
   public CustomerService(CustomerRepository customerRepository) {
     this.customerRepository = customerRepository;
   }
