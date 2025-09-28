@@ -9,22 +9,18 @@ import edu.uptc.swii.edamicrokafka.utils.JsonUtils;
 
 @Service
 public class OrderEventProducer {
-  private static final String TOPIC_ADD = "addorder_events";
-  private static final String TOPIC_EDIT = "editorder_events";
+  private static final String TOPIC_ORDER = "order_events";
 
   @Autowired
-  private KafkaTemplate<String, String> kafkaTemplateAdd;
+  private KafkaTemplate<String, String> kafkaTemplateOrder;
 
   public void sendAddOrderEvent(Order order) {
     String json = JsonUtils.toJson(order);
-    kafkaTemplateAdd.send(TOPIC_ADD, json);
+    kafkaTemplateOrder.send(TOPIC_ORDER, json);
   }
-
-  @Autowired
-  private KafkaTemplate<String, String> kafkaTemplateEdit;
 
   public void sendEditOrderEvent(Order order) {
     String json = JsonUtils.toJson(order);
-    kafkaTemplateEdit.send(TOPIC_EDIT, json);
+    kafkaTemplateOrder.send(TOPIC_ORDER, json);
   }
 }

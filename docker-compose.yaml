@@ -29,13 +29,9 @@ services:
         echo 'Kafka is not ready yet, waiting...' && sleep 5;
       done &&
       echo 'Creating topics...' &&
-      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic addcustomer_events &&
-      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic editcustomer_events &&
-      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic deletecustomer_events &&
-      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic addlogin_events &&
-      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic editlogin_events &&
-      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic addorder_events &&
-      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic editorder_events &&
+      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic customer_events &&
+      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic login_events &&
+      kafka-topics --create --if-not-exists --bootstrap-server localhost:29092 --partitions 1 --replication-factor 1 --topic order_events &&
       echo 'Topics created successfully!' &&
       wait
       "

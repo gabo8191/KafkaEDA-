@@ -9,21 +9,14 @@ import edu.uptc.swii.edamicrokafka.utils.JsonUtils;
 
 @Service
 public class OrderEventConsumer {
-  private static final String TOPIC_ADD = "addorder_events";
-  private static final String TOPIC_EDIT = "editorder_events";
+  private static final String TOPIC_ORDER = "order_events";
 
   @Autowired
   private OrderService orderService;
 
-  @KafkaListener(topics = TOPIC_ADD, groupId = "order_group")
-  public void handleAddOrderEvent(String order) {
-    Order receiveAddOrder = JsonUtils.fromJson(order, Order.class);
-    orderService.save(receiveAddOrder);
-  }
-
-  @KafkaListener(topics = TOPIC_EDIT, groupId = "order_group")
-  public void handleEditOrderEvent(String order) {
-    Order receiveEditOrder = JsonUtils.fromJson(order, Order.class);
-    orderService.save(receiveEditOrder);
+  @KafkaListener(topics = TOPIC_ORDER, groupId = "order_group")
+  public void handleOrderEvent(String orderJson) {
+    Order order = JsonUtils.fromJson(orderJson, Order.class);
+    orderService.save(order);
   }
 }

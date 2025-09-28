@@ -9,41 +9,33 @@ import edu.uptc.swii.edamicrokafka.utils.JsonUtils;
 
 @Service
 public class CustomerEventProducer {
-  private static final String TOPIC_ADD = "addcustomer_events";
-  private static final String TOPIC_EDIT = "editcustomer_events";
-  private static final String TOPIC_DELETE = "deletecustomer_events";
-  private static final String TOPIC_ADD_LOGIN = "addlogin_events";
+  private static final String TOPIC_CUSTOMER = "customer_events";
+  private static final String TOPIC_LOGIN = "login_events";
 
   @Autowired
-  private KafkaTemplate<String, String> kafkaTemplateAdd;
+  private KafkaTemplate<String, String> kafkaTemplateCustomer;
 
   @Autowired
-  private KafkaTemplate<String, String> kafkaTemplateAddLogin;
+  private KafkaTemplate<String, String> kafkaTemplateLogin;
 
   public void sendAddCustomerEvent(Customer customer, String password) {
     String json = JsonUtils.toJson(customer);
-    kafkaTemplateAdd.send(TOPIC_ADD, json);
+    kafkaTemplateCustomer.send(TOPIC_CUSTOMER, json);
     sendAddLoginEvent(customer, password);
   }
 
-  public void sendAddLoginEvent(Customer customer, String password) {
-    String loginJson = "{\"customerId\":\"" + customer.getDocument() + "\",\"password\":\"" + password + "\"}";
-    kafkaTemplateAddLogin.send(TOPIC_ADD_LOGIN, loginJson);
-  }
-
-  @Autowired
-  private KafkaTemplate<String, String> kafkaTemplateEdit;
-
   public void sendEditCustomerEvent(Customer customer) {
     String json = JsonUtils.toJson(customer);
-    kafkaTemplateEdit.send(TOPIC_EDIT, json);
+    kafkaTemplateCustomer.send(TOPIC_CUSTOMER, json);
   }
-
-  @Autowired
-  private KafkaTemplate<String, String> kafkaTemplateDelete;
 
   public void sendDeleteCustomerEvent(Customer customer) {
     String json = JsonUtils.toJson(customer);
-    kafkaTemplateDelete.send(TOPIC_DELETE, json);
+    kafkaTemplateCustomer.send(TOPIC_CUSTOMER, json);
+  }
+
+  private void sendAddLoginEvent(Customer customer, String password) {
+    String loginJson = "{\"customerId\":\"" + customer.getDocument() + "\",\"password\":\"" + password + "\"}";
+    kafkaTemplateLogin.send(TOPIC_LOGIN, loginJson);
   }
 }

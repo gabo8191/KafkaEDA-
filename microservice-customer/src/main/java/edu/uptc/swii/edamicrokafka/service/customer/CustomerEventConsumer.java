@@ -2,7 +2,6 @@ package edu.uptc.swii.edamicrokafka.service.customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import edu.uptc.swii.edamicrokafka.model.Customer;
@@ -10,35 +9,19 @@ import edu.uptc.swii.edamicrokafka.utils.JsonUtils;
 
 @Service
 public class CustomerEventConsumer {
-  private static final String TOPIC_ADD = "addcustomer_events";
-  private static final String TOPIC_EDIT = "editcustomer_events";
-  private static final String TOPIC_DELETE = "deletecustomer_events";
-  private static final String TOPIC_ADD_LOGIN = "addlogin_events";
+  private static final String TOPIC_CUSTOMER = "customer_events";
 
   @Autowired
   private CustomerService customerService;
 
-  @Autowired
-  private KafkaTemplate<String, String> kafkaTemplate;
+  @KafkaListener(topics = TOPIC_CUSTOMER, groupId = "customer_group")
+  public void handleCustomerEvent(String customerJson) {
+    Customer customer = JsonUtils.fromJson(customerJson, Customer.class);
 
-  @KafkaListener(topics = TOPIC_ADD, groupId = "customer_group")
-  public void handleAddCustomerEvent(String customer) {
-    Customer receiveAddCustomer = JsonUtils.fromJson(customer, Customer.class);
-    customerService.save(receiveAddCustomer);
-
-    // No enviamos evento de Login aquí porque ya se envió desde el Producer
-    // El Login se maneja directamente desde el CustomerEventProducer
-  }
-
-  @KafkaListener(topics = TOPIC_EDIT, groupId = "customer_group")
-  public void handleEditCustomerEvent(String customer) {
-    Customer receiveEditCustomer = JsonUtils.fromJson(customer, Customer.class);
-    customerService.save(receiveEditCustomer);
-  }
-
-  @KafkaListener(topics = TOPIC_DELETE, groupId = "customer_group")
-  public void handleDeleteCustomerEvent(String customer) {
-    Customer receiveDeleteCustomer = JsonUtils.fromJson(customer, Customer.class);
-    customerService.delete(receiveDeleteCustomer);
+    if (customer.getDocument() != null && !customer.getDocument().isEmpty()) {
+      customerService.save(customer);
+    } else {
+      customerService.delete(customer);
+    }
   }
 }

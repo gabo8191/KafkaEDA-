@@ -9,22 +9,18 @@ import edu.uptc.swii.edamicrokafka.utils.JsonUtils;
 
 @Service
 public class LoginEventProducer {
-    private static final String TOPIC_ADD = "addlogin_events";
-    private static final String TOPIC_EDIT = "editlogin_events";
+  private static final String TOPIC_LOGIN = "login_events";
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplateAdd;
+  @Autowired
+  private KafkaTemplate<String, String> kafkaTemplateLogin;
 
-    public void sendAddLoginEvent(Login login) {
-        String json = JsonUtils.toJson(login);
-        kafkaTemplateAdd.send(TOPIC_ADD, json);
-    }
+  public void sendAddLoginEvent(Login login) {
+    String json = JsonUtils.toJson(login);
+    kafkaTemplateLogin.send(TOPIC_LOGIN, json);
+  }
 
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplateEdit;
-
-    public void sendEditLoginEvent(Login login) {
-        String json = JsonUtils.toJson(login);
-        kafkaTemplateEdit.send(TOPIC_EDIT, json);
-    }
+  public void sendEditLoginEvent(Login login) {
+    String json = JsonUtils.toJson(login);
+    kafkaTemplateLogin.send(TOPIC_LOGIN, json);
+  }
 }
